@@ -6,6 +6,7 @@ module.exports = {
       transparent: "transparent",
       current: "currentColor",
       "gris-souris": "#EDEDED",
+      gris: "#C6C6C6",
       white: "#ffffff",
       jaune: "#FFD15B",
       "gris-dark": "#7A7A7A",
@@ -18,6 +19,7 @@ module.exports = {
       },
       fontFamily: {
         anton: ["Anton", "sans-serif"],
+        manrope: ["Manrope", "sans-serif"],
       },
     },
   },
