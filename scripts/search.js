@@ -1,57 +1,46 @@
 // Methode boucle
 import { recipes } from "../data/recipes.js";
-// Récupérez la référence du champ de recherche
+import { displaySearchResults } from "./Templates/Cards.js";
+// import { updateListBox } from "./tagSearch.js";
+// Récupérer la référence du champ de recherche
 const recipeSearch = document.getElementById("search");
 const clearSearch = document.getElementById("clearSearch");
 
-// Ajoutez un gestionnaire d'événements pour gérer la recherche
-recipeSearch.addEventListener("input", () => {
-  const searchQuery = recipeSearch.value.toLowerCase(); // Convertissez en minuscules
-
-  // Réinitialisez les résultats de la recherche
-  const searchResults = [];
+// Ajout d'un gestionnaire d'événements pour gérer la recherche et la saisie de texte
+recipeSearch.addEventListener("input", (listBox, key) => {
+  const searchQuery = recipeSearch.value.trim().toLowerCase();
 
   if (searchQuery.length >= 3) {
-    // Utilisez une boucle for avec une fonction fléchée pour parcourir le tableau de recettes
+    // Réinitialisation des résultats de la recherche
+    const searchResults = [];
+
+    // Boucle for pour parcourir le tableau de recettes
     for (let i = 0; i < recipes.length; i++) {
       const recipe = recipes[i];
-      const recipeContent =
-        recipe.name.toLowerCase() +
-        recipe.description.toLowerCase() +
-        recipe.ingredients
-          .map((ingredient) => ingredient.ingredient.toLowerCase())
-          .join("");
+      const recipeContent = `${recipe.name} ${
+        recipe.description
+      } ${recipe.ingredients
+        .map((ingredient) => ingredient.ingredient)
+        .join(" ")}`.toLowerCase();
+
       if (recipeContent.includes(searchQuery)) {
         searchResults.push(recipe);
       }
     }
-  }
 
-  // Affichez les résultats de la recherche
-  if (searchQuery.length >= 3) {
+    // Affichage des résultats de la recherche
     displaySearchResults(searchResults);
-  }
-});
-
-// Fonction fléchée pour afficher les résultats de la recherche
-export const displaySearchResults = (results) => {
-  console.log("Résultats de la recherche :", results);
-};
-
-// Ajoutez un gestionnaire d'événements pour la saisie de texte
-recipeSearch.addEventListener("input", () => {
-  const searchText = recipeSearch.value;
-
-  // Affichez l'icône de la croix si du texte est saisi, sinon masquez-la
-  if (searchText.length > 0) {
-    clearSearch.style.display = "block";
   } else {
-    clearSearch.style.display = "none";
+    displaySearchResults(recipes);
   }
+
+  // Affichage de l'icône de la croix si du texte est saisi, sinon masquez-la
+  clearSearch.style.display = searchQuery.length > 0 ? "block" : "none";
 });
 
-// Ajoutez un gestionnaire d'événements pour effacer le champ de recherche
+// Ajout d'un gestionnaire d'événements pour effacer le champ de recherche
 clearSearch.addEventListener("click", () => {
   recipeSearch.value = "";
+  displaySearchResults(recipes);
   clearSearch.style.display = "none";
 });
