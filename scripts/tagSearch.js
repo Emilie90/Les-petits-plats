@@ -2,6 +2,7 @@ import { recipes } from "../data/recipes.js";
 import { displaySearchResults } from "./Templates/Cards.js";
 import { displayTagsSelected } from "./Templates/TagsSelected.js";
 import { displayTagListbox } from "./Templates/TagsSelected.js";
+import { updateResultsAfterTagRemoval } from "./Templates/TagsSelected.js";
 
 // référence des éléments select dans le HTML
 const ingredientsList = document.getElementById("ingredientsList");
@@ -176,7 +177,7 @@ let selectedAppliance = [];
 let selectedUstensils = [];
 
 // gestionnaire d'événements au clic sur les options de la liste
-
+let tagElements = [];
 export function handleTagClick(uniqueArray, listContainer, key, SelectedArray) {
   listContainer.addEventListener("click", (e) => {
     const selectedTag = e.target.textContent.toLowerCase();
@@ -206,13 +207,14 @@ export function handleTagClick(uniqueArray, listContainer, key, SelectedArray) {
     fillListBox(uniqueArray, listContainer);
     displaySearchResults(searchResults);
     // updateListBox(searchResults, listContainer, key);
-    displayTagsSelected(selectedTags, key, listContainer);
+    displayTagsSelected(selectedTags, key, listContainer, tagElements);
     displayTagListbox(
       listContainer,
       key,
       SelectedArray,
       selectedTags,
-      uniqueArray
+      uniqueArray,
+      tagElements
     );
   });
 }

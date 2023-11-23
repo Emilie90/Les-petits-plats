@@ -4,18 +4,22 @@ import { capitalizeFirstLetter } from "../tagSearch.js";
 import { normalizeName } from "../tagSearch.js";
 
 const tagContainer = document.getElementById("tagContainer");
-
-export const displayTagsSelected = (tagselected, key, listContainer) => {
+let tagElements = [];
+export const displayTagsSelected = (tagselected, key) => {
   tagContainer.innerHTML = "";
-
+  console.log(tagElements);
   tagselected.forEach((tags) => {
-    const tag = document.createElement("div");
     const tagCapitalize = capitalizeFirstLetter(tags);
+    const tag = document.createElement("div");
+    const uniqueId = `${tags.toLowerCase()}`;
+    tag.setAttribute("data-unique-id", uniqueId); // Utilisez setAttribute pour définir l'attribut
 
-    tag.innerHTML = `<div class="bg-jaune items-center justify-between flex w-40 h-14 px-4 py-4 text-sm font-normal rounded-lg tag" data-type="${key}" data-value="${tags.toLowerCase()}">${tagCapitalize} <svg xmlns="http://www.w3.org/2000/svg" class="tagClearsCross cursor-pointer" width="14" height="13" viewBox="0 0 14 13" fill="none">
-      <path d="M12 11.5L7 6.5M7 6.5L2 1.5M7 6.5L12 1.5M7 6.5L2 11.5" stroke="#1B1B1B" stroke-width="2.16667" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg></div>`;
+    // Utilisez une combinaison unique
+    tag.innerHTML = `<div class="bg-jaune items-center justify-between flex w-40 h-14 px-4 py-4 text-sm font-normal rounded-lg tag" data-type="${key}" data-value="${tags.toLowerCase()}" >${tagCapitalize} <svg xmlns="http://www.w3.org/2000/svg" class="tagClearsCross cursor-pointer" width="14" height="13" viewBox="0 0 14 13" fill="none">
+  <path d="M12 11.5L7 6.5M7 6.5L2 1.5M7 6.5L12 1.5M7 6.5L2 11.5" stroke="#1B1B1B" stroke-width="2.16667" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg></div>`;
 
+    tagElements.push({ element: tag, uniqueId });
     tagContainer.appendChild(tag);
     const tagClearsCross = tag.querySelector(".tagClearsCross");
     tagClearsCross.addEventListener("click", () => {
@@ -23,9 +27,9 @@ export const displayTagsSelected = (tagselected, key, listContainer) => {
       tagselected.splice(index, 1);
 
       // Supprimer le tag de tagContainer
-      tagContainer.removeChild(tag);
+      // tagContainer.removeChild(tag);
 
-      updateResultsAfterTagRemoval(tagselected);
+      updateResultsAfterTagRemoval(tagselected, uniqueId);
     });
   });
 };
@@ -39,34 +43,43 @@ export const displayTagListbox = (
 ) => {
   SelectedArray.forEach((tags) => {
     const tagDiv = document.createElement("div");
-
+    const uniqueId = `${tags.toLowerCase()}`;
+    tagDiv.setAttribute("data-unique-id", uniqueId);
     tagDiv.innerHTML = `<div class="tagDiv bg-jaune justify-between flex p-3.5" data-type="${key}" data-value="${tags.toLowerCase()}">${capitalizeFirstLetter(
       normalizeName(tags)
     )} <img class="tagListclearsCross" src="../../images/cross.svg" alt="deletetag"/>
           </div>`;
-
+    tagElements.push({ element: tagDiv, uniqueId });
     listContainer.insertBefore(tagDiv, listContainer.firstChild);
 
     tagDiv.addEventListener("click", (e) => {
       e.stopPropagation();
+
       const indexArray = SelectedArray.indexOf(tags);
       SelectedArray.splice(indexArray, 1);
       const index = tagselected.indexOf(tags);
       tagselected.splice(index, 1);
 
       // Supprimer le tag de tagDiv
-      listContainer.removeChild(tagDiv);
+      // listContainer.removeChild(tagDiv);
 
       uniqueArray.push(capitalizeFirstLetter(normalizeName(tags)));
-      updateResultsAfterTagRemoval(tagselected);
+      updateResultsAfterTagRemoval(tagselected, uniqueId, tagElements);
     });
+  });
+};
+export const deleteTags = (uniqueId) => {
+  tagElements = tagElements.filter(({ element, uniqueId: elementUniqueId }) => {
+    if (element && element.parentNode && elementUniqueId === uniqueId) {
+      element.parentNode.removeChild(element);
+      return false;
+    }
+    return true;
   });
 };
 
 // Fonction pour mettre à jour les résultats après la suppression d'un tag
-export const updateResultsAfterTagRemoval = (tagselected) => {
-  // Mettez à jour les résultats comme nécessaire
-
+export const updateResultsAfterTagRemoval = (tagselected, uniqueId) => {
   const searchResults = recipes.filter((recipe) => {
     // Concaténation du contenu de la recette à rechercher
     const recipeContent =
@@ -81,4 +94,6 @@ export const updateResultsAfterTagRemoval = (tagselected) => {
     return tagselected.every((tag) => recipeContent.includes(tag));
   });
   displaySearchResults(searchResults);
+  deleteTags(uniqueId);
+  console.log(tagElements);
 };
