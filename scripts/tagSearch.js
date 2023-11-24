@@ -2,7 +2,6 @@ import { recipes } from "../data/recipes.js";
 import { displaySearchResults } from "./Templates/Cards.js";
 import { displayTagsSelected } from "./Templates/TagsSelected.js";
 import { displayTagListbox } from "./Templates/TagsSelected.js";
-import { updateResultsAfterTagRemoval } from "./Templates/TagsSelected.js";
 
 // référence des éléments select dans le HTML
 const ingredientsList = document.getElementById("ingredientsList");
@@ -177,13 +176,17 @@ let selectedAppliance = [];
 let selectedUstensils = [];
 
 // gestionnaire d'événements au clic sur les options de la liste
-let tagElements = [];
-export function handleTagClick(uniqueArray, listContainer, key, SelectedArray) {
+
+export function handleTagClick(uniqueArray, listContainer, key, selectedArray) {
   listContainer.addEventListener("click", (e) => {
     const selectedTag = e.target.textContent.toLowerCase();
-    SelectedArray.push(selectedTag);
-    const TagUniqueArray = capitalizeFirstLetter(normalizeName(selectedTag));
-    const index = uniqueArray.indexOf(TagUniqueArray);
+    selectedArray.push(selectedTag);
+
+    console.log(selectedIngredients);
+    console.log(selectedArray);
+
+    const tagUniqueArray = capitalizeFirstLetter(normalizeName(selectedTag));
+    const index = uniqueArray.indexOf(tagUniqueArray);
     uniqueArray.splice(index, 1);
 
     // Concaténer les trois tableaux
@@ -207,14 +210,13 @@ export function handleTagClick(uniqueArray, listContainer, key, SelectedArray) {
     fillListBox(uniqueArray, listContainer);
     displaySearchResults(searchResults);
     // updateListBox(searchResults, listContainer, key);
-    displayTagsSelected(selectedTags, key, listContainer, tagElements);
+    displayTagsSelected(selectedTags, key, selectedArray);
     displayTagListbox(
       listContainer,
       key,
-      SelectedArray,
+      selectedArray,
       selectedTags,
-      uniqueArray,
-      tagElements
+      uniqueArray
     );
   });
 }
