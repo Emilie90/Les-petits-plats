@@ -180,44 +180,43 @@ let selectedUstensils = [];
 export function handleTagClick(uniqueArray, listContainer, key, selectedArray) {
   listContainer.addEventListener("click", (e) => {
     const selectedTag = e.target.textContent.toLowerCase();
-    selectedArray.push(selectedTag);
 
-    console.log(selectedIngredients);
-    console.log(selectedArray);
+    if (!selectedArray.includes(selectedTag)) {
+      selectedArray.push(selectedTag);
 
-    const tagUniqueArray = capitalizeFirstLetter(normalizeName(selectedTag));
-    const index = uniqueArray.indexOf(tagUniqueArray);
-    uniqueArray.splice(index, 1);
+      const tagUniqueArray = capitalizeFirstLetter(normalizeName(selectedTag));
+      const index = uniqueArray.indexOf(tagUniqueArray);
+      uniqueArray.splice(index, 1);
 
-    // Concaténer les trois tableaux
-    let selectedTags = selectedIngredients.concat(
-      selectedAppliance,
-      selectedUstensils
-    );
+      let selectedTags = selectedIngredients.concat(
+        selectedAppliance,
+        selectedUstensils
+      );
 
-    const searchResults = recipes.filter((recipe) => {
-      const recipeContent =
-        recipe.name.toLowerCase() +
-        recipe.description.toLowerCase() +
-        recipe.ingredients
-          .map((ingredient) => ingredient.ingredient.toLowerCase())
-          .join("") +
-        recipe.appliance.toLowerCase() +
-        recipe.ustensils.map((ustensil) => ustensil.toLowerCase()).join("");
+      const searchResults = recipes.filter((recipe) => {
+        const recipeContent =
+          recipe.name.toLowerCase() +
+          recipe.description.toLowerCase() +
+          recipe.ingredients
+            .map((ingredient) => ingredient.ingredient.toLowerCase())
+            .join("") +
+          recipe.appliance.toLowerCase() +
+          recipe.ustensils.map((ustensil) => ustensil.toLowerCase()).join("");
 
-      return selectedTags.every((tag) => recipeContent.includes(tag));
-    });
-    fillListBox(uniqueArray, listContainer);
-    displaySearchResults(searchResults);
-    // updateListBox(searchResults, listContainer, key);
-    displayTagsSelected(selectedTags, key, selectedArray);
-    displayTagListbox(
-      listContainer,
-      key,
-      selectedArray,
-      selectedTags,
-      uniqueArray
-    );
+        return selectedTags.every((tag) => recipeContent.includes(tag));
+      });
+
+      fillListBox(uniqueArray, listContainer);
+      displaySearchResults(searchResults);
+      displayTagsSelected(selectedTags, key, selectedArray);
+      displayTagListbox(
+        listContainer,
+        key,
+        selectedArray,
+        selectedTags,
+        uniqueArray
+      );
+    }
   });
 }
 

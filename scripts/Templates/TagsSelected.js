@@ -5,27 +5,37 @@ import { normalizeName } from "../tagSearch.js";
 
 const tagContainer = document.getElementById("tagContainer");
 let tagElements = [];
-
 export const displayTagsSelected = (tagselected, key, selectedArray) => {
   tagContainer.innerHTML = "";
+
+  // Utilise un objet pour stocker les idTag et les éléments correspondants
+  const idTagElements = {};
+
   tagselected.forEach((tags) => {
     const tagCapitalize = capitalizeFirstLetter(tags);
-    const tag = document.createElement("div");
     const idTag = `${tags.toLowerCase()}`;
-    tag.setAttribute("data-unique-id", idTag);
 
-    tag.innerHTML = `<div class="bg-jaune items-center justify-between flex w-40 h-14 px-4 py-4 text-sm font-normal rounded-lg tag" data-type="${key}" data-value="${tags.toLowerCase()}">${tagCapitalize} <svg xmlns="http://www.w3.org/2000/svg" class="tagClearsCross cursor-pointer" width="14" height="13" viewBox="0 0 14 13" fill="none">
-      <path d="M12 11.5L7 6.5M7 6.5L2 1.5M7 6.5L12 1.5M7 6.5L2 11.5" stroke="#1B1B1B" stroke-width="2.16667" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg></div>`;
+    // Vérifie si le tag a déjà été ajouté pour éviter les répétitions
+    if (!idTagElements[idTag]) {
+      const tag = document.createElement("div");
+      tag.setAttribute("data-unique-id", idTag);
 
-    tagElements.push({ element: tag, idTag });
+      tag.innerHTML = `<div class="bg-jaune items-center justify-between flex w-40 h-14 px-4 py-4 text-sm font-normal rounded-lg tag" data-type="${key}" data-value="${tags.toLowerCase()}">${tagCapitalize} <svg xmlns="http://www.w3.org/2000/svg" class="tagClearsCross cursor-pointer" width="14" height="13" viewBox="0 0 14 13" fill="none">
+        <path d="M12 11.5L7 6.5M7 6.5L2 1.5M7 6.5L12 1.5M7 6.5L2 11.5" stroke="#1B1B1B" stroke-width="2.16667" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg></div>`;
 
-    tagContainer.appendChild(tag);
-    const tagClearsCross = tag.querySelector(".tagClearsCross");
-    tagClearsCross.addEventListener("click", () => {
-      deleteTags(idTag, tagselected, selectedArray, tags);
-      updateResultsAfterTagRemoval(tagselected, idTag, tagElements);
-    });
+      tagElements.push({ element: tag, idTag });
+      tagContainer.appendChild(tag);
+
+      const tagClearsCross = tag.querySelector(".tagClearsCross");
+      tagClearsCross.addEventListener("click", () => {
+        deleteTags(idTag, tagselected, selectedArray, tags);
+        updateResultsAfterTagRemoval(tagselected, idTag, tagElements);
+      });
+
+      // Ajoute le idTag et l'élément à l'objet idTagElements
+      idTagElements[idTag] = tag;
+    }
   });
 };
 
@@ -62,15 +72,16 @@ export const displayTagListbox = (
   });
 };
 
-export const deleteTags = (idTag, tagselected, selectedArray, tag) => {
-  console.log(tag);
-  const index = tagselected.indexOf(tag);
+export const deleteTags = (idTag, tagselected, selectedArray, tagToRemove) => {
+  const tagIndex = selectedArray.indexOf(tagToRemove);
+  if (tagIndex !== -1) {
+    selectedArray.splice(tagIndex, 1);
+  }
+  const index = tagselected.indexOf(tagToRemove);
   tagselected.splice(index, 1);
 
-  const indexSelectedArray = selectedArray.indexOf(tag);
+  const indexSelectedArray = selectedArray.indexOf(tagToRemove);
   selectedArray.splice(indexSelectedArray, 1);
-
-  console.log(tagselected, selectedArray);
 
   tagElements = tagElements.filter(({ element, idTag: elementIdTag }) => {
     if (element && element.parentNode && elementIdTag === idTag) {
@@ -81,9 +92,6 @@ export const deleteTags = (idTag, tagselected, selectedArray, tag) => {
     return true;
   });
 
-  // Ajoutez une vérification ici si nécessaire
-
-  // Assurez-vous que tagElements est bien mis à jour avant d'appeler updateResultsAfterTagRemoval
   updateResultsAfterTagRemoval(tagselected, idTag, tagElements);
 };
 
