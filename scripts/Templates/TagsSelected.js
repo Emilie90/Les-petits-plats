@@ -4,13 +4,12 @@ import { capitalizeFirstLetter } from "../tagSearch.js";
 import { normalizeName } from "../tagSearch.js";
 
 const tagContainer = document.getElementById("tagContainer");
-
+let tagElements = [];
 export const displayTagsSelected = (
   tagselected,
   key,
   selectedArray,
-  listContainer,
-  tagElements
+  listContainer
 ) => {
   console.log("tagElemennt:", tagElements);
 
@@ -34,8 +33,8 @@ export const displayTagsSelected = (
 
     const tagClearsCross = tag.querySelector(".tagClearsCross");
     tagClearsCross.addEventListener("click", () => {
-      deleteTags(idTag, tagselected, selectedArray, tags, tagElements);
-      updateResultsAfterTagRemoval(tagselected, idTag, tagElements);
+      deleteTags(idTag, tagselected, selectedArray, tags);
+      updateResultsAfterTagRemoval(tagselected, idTag);
     });
   });
 };
@@ -46,8 +45,7 @@ export const displayTagListbox = (
   selectedArray,
   tagselected,
 
-  uniqueArray,
-  tagElements
+  uniqueArray
 ) => {
   selectedArray.forEach((tags) => {
     const tagDiv = document.createElement("div");
@@ -67,20 +65,14 @@ export const displayTagListbox = (
       // selectedArray.splice(indexArray, 1);
       // const index = tagselected.indexOf(tags);
       // tagselected.splice(index, 1);
-      deleteTags(idTag, tagselected, selectedArray, tags, tagElements);
+      deleteTags(idTag, tagselected, selectedArray, tags);
       uniqueArray.push(capitalizeFirstLetter(normalizeName(tags)));
-      updateResultsAfterTagRemoval(tagselected, idTag, tagElements);
+      updateResultsAfterTagRemoval(tagselected, idTag);
     });
   });
 };
 
-export const deleteTags = (
-  idTag,
-  tagselected,
-  selectedArray,
-  tagToRemove,
-  tagElements
-) => {
+export const deleteTags = (idTag, tagselected, selectedArray, tagToRemove) => {
   console.log("tagElements :", tagElements);
 
   const tagIndex = selectedArray.indexOf(tagToRemove);
@@ -101,18 +93,13 @@ export const deleteTags = (
     }
     return true;
   });
-
   console.log("tagElements :", tagElements);
   console.log("tagselected :", tagselected);
   updateResultsAfterTagRemoval(tagselected);
 };
 
 // Fonction pour mettre à jour les résultats après la suppression d'un tag
-export const updateResultsAfterTagRemoval = (
-  tagselected,
-  idTag,
-  tagElements
-) => {
+export const updateResultsAfterTagRemoval = (tagselected, idTag) => {
   const searchResults = recipes.filter((recipe) => {
     // Concaténation du contenu de la recette à rechercher
     const recipeContent =
