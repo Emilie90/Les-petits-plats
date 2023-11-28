@@ -7,7 +7,7 @@ const tagContainer = document.getElementById("tagContainer");
 let tagElements = [];
 export const displayTagsSelected = (tagselected, key, selectedArray) => {
   tagContainer.innerHTML = "";
-
+  console.log("tagselected :", tagselected);
   tagselected.forEach((tags) => {
     const tagCapitalize = capitalizeFirstLetter(tags);
     const idTag = `${tags.toLowerCase()}`;
@@ -65,24 +65,25 @@ export const displayTagListbox = (
 
 export const deleteTags = (idTag, tagselected, selectedArray, tagToRemove) => {
   const tagIndex = selectedArray.indexOf(tagToRemove);
+  console.log(" tagToRemove :", tagToRemove);
+
   if (tagIndex !== -1) {
     selectedArray.splice(tagIndex, 1);
   }
+
   const index = tagselected.indexOf(tagToRemove);
   tagselected.splice(index, 1);
 
-  const indexSelectedArray = selectedArray.indexOf(tagToRemove);
-  selectedArray.splice(indexSelectedArray, 1);
-
-  tagElements = tagElements.filter(({ element, idTag: elementIdTag }) => {
-    if (element && element.parentNode && elementIdTag === idTag) {
+  // Supprimer tous les éléments correspondant à idTag
+  tagElements = tagElements.filter(({ idTag: elementIdTag, element }) => {
+    if (elementIdTag === idTag && element && element.parentNode) {
       element.parentNode.removeChild(element);
-
       return false;
     }
     return true;
   });
-
+  console.log("tagElements :", tagElements);
+  console.log("tagselected :", tagselected);
   updateResultsAfterTagRemoval(tagselected, idTag, tagElements);
 };
 
