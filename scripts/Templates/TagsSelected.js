@@ -9,7 +9,7 @@ export const displayTagsSelected = (
   tagselected,
   key,
   selectedArray,
-  listContainer
+  uniqueArray
 ) => {
   console.log("tagElemennt:", tagElements);
 
@@ -33,7 +33,7 @@ export const displayTagsSelected = (
 
     const tagClearsCross = tag.querySelector(".tagClearsCross");
     tagClearsCross.addEventListener("click", () => {
-      deleteTags(idTag, tagselected, selectedArray, tags);
+      deleteTags(idTag, tagselected, selectedArray, tags, uniqueArray);
       updateResultsAfterTagRemoval(tagselected, idTag);
     });
   });
@@ -65,14 +65,20 @@ export const displayTagListbox = (
       // selectedArray.splice(indexArray, 1);
       // const index = tagselected.indexOf(tags);
       // tagselected.splice(index, 1);
-      deleteTags(idTag, tagselected, selectedArray, tags);
+      deleteTags(idTag, tagselected, selectedArray, tags, uniqueArray);
       uniqueArray.push(capitalizeFirstLetter(normalizeName(tags)));
       updateResultsAfterTagRemoval(tagselected, idTag);
     });
   });
 };
 
-export const deleteTags = (idTag, tagselected, selectedArray, tagToRemove) => {
+export const deleteTags = (
+  idTag,
+  tagselected,
+  selectedArray,
+  tagToRemove,
+  uniqueArray
+) => {
   console.log("tagElements :", tagElements);
 
   const tagIndex = selectedArray.indexOf(tagToRemove);
@@ -81,7 +87,7 @@ export const deleteTags = (idTag, tagselected, selectedArray, tagToRemove) => {
   if (tagIndex !== -1) {
     selectedArray.splice(tagIndex, 1);
   }
-
+  uniqueArray.push(tagToRemove);
   const index = tagselected.indexOf(tagToRemove);
   tagselected.splice(index, 1);
 

@@ -2,16 +2,25 @@ const nbRecipesElement = document.getElementById("nbRecipes");
 const recipesContainer = document.getElementById("recipesContainer");
 
 // Fonction fléchée pour afficher les résultats de la recherche
-export const displaySearchResults = (results) => {
+export const displaySearchResults = (results, searchQuery) => {
+  // Effacez le contenu actuel du conteneur
+  recipesContainer.innerHTML = "";
   // MAJ de l'affichage du nombre de recettes
   if (results.length > 1) {
     nbRecipesElement.textContent = `${results.length} recettes`;
-  } else {
+  } else if (results.length === 1) {
     nbRecipesElement.textContent = `${results.length} recette`;
+  } else if (results.length === 0) {
+    nbRecipesElement.textContent = `${results.length} recette`;
+    if (searchQuery) {
+      recipesContainer.innerHTML = `<p class="text-jaune text-center font-normal text-5xl">Aucune recette ne contient "${searchQuery}" vous pouvez chercher «
+    tarte aux pommes », « poisson », etc</p>`;
+    } else {
+      recipesContainer.innerHTML =
+        // eslint-disable-next-line quotes
+        '<p class="text-jaune text-center font-normal text-5xl">Aucune recette</p>';
+    }
   }
-
-  // Effacez le contenu actuel du conteneur
-  recipesContainer.innerHTML = "";
 
   // Parcourez les résultats et créez une carte pour chaque recette
   results.forEach((recipe) => {

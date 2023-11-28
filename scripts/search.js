@@ -35,7 +35,7 @@ recipeSearch.addEventListener("input", (listBox, key) => {
     const { uniqueIngredients, uniqueAppliances, uniqueUstensils } =
       extractUniqueTags(searchResults);
     // Affichage des résultats de la recherche
-    displaySearchResults(searchResults);
+    displaySearchResults(searchResults, searchQuery);
 
     fillListBox(uniqueIngredients, ingredientsList);
     fillListBox(uniqueAppliances, appliancesList);

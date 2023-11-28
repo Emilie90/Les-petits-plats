@@ -45,8 +45,8 @@ function toggleList(element, list, searchBg) {
   });
 }
 
-function fillListBox(uniqueSet, listBox) {
-  // Effacez le contenu actuel de la liste
+export function fillListBox(uniqueSet, listBox) {
+  // Efface le contenu actuel de la liste
   listBox.innerHTML = "";
 
   uniqueSet.forEach((item) => {
@@ -55,36 +55,46 @@ function fillListBox(uniqueSet, listBox) {
     listItem.classList.add("p-3.5");
     listItem.classList.add("hover:bg-jaune");
 
-    // Ajoutez l'élément de liste à la liste container
+    // Ajout l'élément de liste à la liste container
     listBox.appendChild(listItem);
   });
 }
 
-// Création des ensembles pour stocker les ingrédients, appareils et ustensiles uniques
-const uniqueIngredients = new Set();
-const uniqueAppliances = new Set();
-const uniqueUstensils = new Set();
-
 // Parcourir toutes les recettes pour extraire les données
-recipes.forEach((recipe) => {
-  recipe.ingredients.forEach((ingredientObj) => {
-    const normalizedIngredient = capitalizeFirstLetter(
-      normalizeName(ingredientObj.ingredient)
+
+export function extractUniqueTags(recipes) {
+  const uniqueIngredients = new Set();
+  const uniqueAppliances = new Set();
+  const uniqueUstensils = new Set();
+
+  // Parcourir toutes les recettes pour extraire les données
+  recipes.forEach((recipe) => {
+    recipe.ingredients.forEach((ingredientObj) => {
+      const normalizedIngredient = capitalizeFirstLetter(
+        normalizeName(ingredientObj.ingredient)
+      );
+      uniqueIngredients.add(normalizedIngredient);
+    });
+
+    const normalizedAppliance = capitalizeFirstLetter(
+      normalizeName(recipe.appliance)
     );
-    uniqueIngredients.add(normalizedIngredient);
+    uniqueAppliances.add(normalizedAppliance);
+
+    recipe.ustensils.forEach((ustensil) => {
+      const normalizedUstensil = capitalizeFirstLetter(normalizeName(ustensil));
+      uniqueUstensils.add(normalizedUstensil);
+    });
   });
 
-  const normalizedAppliances = capitalizeFirstLetter(
-    normalizeName(recipe.appliance)
-  );
-  uniqueAppliances.add(normalizedAppliances);
-
-  recipe.ustensils.forEach((ustensil) => {
-    const normalizedUstensils = capitalizeFirstLetter(normalizeName(ustensil));
-    uniqueUstensils.add(normalizedUstensils);
-  });
-});
-
+  return {
+    uniqueIngredients,
+    uniqueAppliances,
+    uniqueUstensils,
+  };
+}
+const { uniqueIngredients, uniqueAppliances, uniqueUstensils } =
+  extractUniqueTags(recipes);
 // Remplir les listboxes avec les éléments uniques
 fillListBox(uniqueIngredients, ingredientsList);
 fillListBox(uniqueAppliances, appliancesList);
@@ -148,28 +158,12 @@ handleTagSearch(
   clearSearchTagUstensils
 );
 
-// // Fonction générique pour mettre à jour la liste d'options
-// export function updateListBox(results, listBox, key) {
-//   const uniqueValues = new Set();
-
-//   results.forEach((result) => {
-//     if (Array.isArray(result[key])) {
-//       // Si c'est un tableau, ajouter chaque élément
-//       result[key].forEach((item) => {
-//         if (item && item.ingredient && typeof item.ingredient === "string") {
-//           uniqueValues.add(item.ingredient.toLowerCase());
-//         } else if (item && typeof item === "string") {
-//           uniqueValues.add(item.toLowerCase());
-//         }
-//       });
-//     } else if (result[key] && typeof result[key] === "string") {
-//       // Si c'est une chaîne de caractères, ajouter la valeur
-//       uniqueValues.add(result[key].toLowerCase());
-//     }
-//   });
-//   fillListBox(uniqueValues, listBox);
-// }
-//Variable globale pour stocker les tags sélectionnés
+// Fonction générique pour mettre à jour la liste d'options
+export function updateListBox(results, listBox, key) {
+  //
+  fillListBox(uniqueValues, listBox);
+}
+// Variable globale pour stocker les tags sélectionnés
 
 let selectedIngredients = [];
 let selectedAppliance = [];
@@ -205,10 +199,9 @@ export function handleTagClick(uniqueArray, listContainer, key, selectedArray) {
 
         return selectedTags.every((tag) => recipeContent.includes(tag));
       });
-
       fillListBox(uniqueArray, listContainer);
       displaySearchResults(searchResults);
-      displayTagsSelected(selectedTags, key, selectedArray, listContainer);
+      displayTagsSelected(selectedTags, key, selectedArray, uniqueArray);
       displayTagListbox(
         listContainer,
         key,
