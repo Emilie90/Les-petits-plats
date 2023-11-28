@@ -8,34 +8,25 @@ let tagElements = [];
 export const displayTagsSelected = (tagselected, key, selectedArray) => {
   tagContainer.innerHTML = "";
 
-  // Utilise un objet pour stocker les idTag et les éléments correspondants
-  const idTagElements = {};
-
   tagselected.forEach((tags) => {
     const tagCapitalize = capitalizeFirstLetter(tags);
     const idTag = `${tags.toLowerCase()}`;
 
-    // Vérifie si le tag a déjà été ajouté pour éviter les répétitions
-    if (!idTagElements[idTag]) {
-      const tag = document.createElement("div");
-      tag.setAttribute("data-unique-id", idTag);
+    const tag = document.createElement("div");
+    tag.setAttribute("data-unique-id", idTag);
 
-      tag.innerHTML = `<div class="bg-jaune items-center justify-between flex w-40 h-14 px-4 py-4 text-sm font-normal rounded-lg tag" data-type="${key}" data-value="${tags.toLowerCase()}">${tagCapitalize} <svg xmlns="http://www.w3.org/2000/svg" class="tagClearsCross cursor-pointer" width="14" height="13" viewBox="0 0 14 13" fill="none">
+    tag.innerHTML = `<div class="bg-jaune items-center justify-between flex w-40 h-14 px-4 py-4 text-sm font-normal rounded-lg tag" data-type="${key}" data-value="${tags.toLowerCase()}">${tagCapitalize} <svg xmlns="http://www.w3.org/2000/svg" class="tagClearsCross cursor-pointer" width="14" height="13" viewBox="0 0 14 13" fill="none">
         <path d="M12 11.5L7 6.5M7 6.5L2 1.5M7 6.5L12 1.5M7 6.5L2 11.5" stroke="#1B1B1B" stroke-width="2.16667" stroke-linecap="round" stroke-linejoin="round"/>
       </svg></div>`;
 
-      tagElements.push({ element: tag, idTag });
-      tagContainer.appendChild(tag);
+    tagElements.push({ element: tag, idTag });
+    tagContainer.appendChild(tag);
 
-      const tagClearsCross = tag.querySelector(".tagClearsCross");
-      tagClearsCross.addEventListener("click", () => {
-        deleteTags(idTag, tagselected, selectedArray, tags);
-        updateResultsAfterTagRemoval(tagselected, idTag, tagElements);
-      });
-
-      // Ajoute le idTag et l'élément à l'objet idTagElements
-      idTagElements[idTag] = tag;
-    }
+    const tagClearsCross = tag.querySelector(".tagClearsCross");
+    tagClearsCross.addEventListener("click", () => {
+      deleteTags(idTag, tagselected, selectedArray, tags);
+      updateResultsAfterTagRemoval(tagselected, idTag, tagElements);
+    });
   });
 };
 
