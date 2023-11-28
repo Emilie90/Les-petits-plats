@@ -1,11 +1,16 @@
 // Methode boucle
 import { recipes } from "../data/recipes.js";
 import { displaySearchResults } from "./Templates/Cards.js";
+import { extractUniqueTags } from "./tagSearch.js";
+import { fillListBox } from "./tagSearch.js";
+
 // import { updateListBox } from "./tagSearch.js";
 // Récupérer la référence du champ de recherche
 const recipeSearch = document.getElementById("search");
 const clearSearch = document.getElementById("clearSearch");
-
+const ingredientsList = document.getElementById("ingredientsList");
+const appliancesList = document.getElementById("appliancesList");
+const ustensilsList = document.getElementById("ustensilsList");
 // Ajout d'un gestionnaire d'événements pour gérer la recherche et la saisie de texte
 recipeSearch.addEventListener("input", (listBox, key) => {
   const searchQuery = recipeSearch.value.trim().toLowerCase();
@@ -27,9 +32,14 @@ recipeSearch.addEventListener("input", (listBox, key) => {
         searchResults.push(recipe);
       }
     }
-
+    const { uniqueIngredients, uniqueAppliances, uniqueUstensils } =
+      extractUniqueTags(searchResults);
     // Affichage des résultats de la recherche
     displaySearchResults(searchResults);
+
+    fillListBox(uniqueIngredients, ingredientsList);
+    fillListBox(uniqueAppliances, appliancesList);
+    fillListBox(uniqueUstensils, ustensilsList);
   } else {
     displaySearchResults(recipes);
   }
