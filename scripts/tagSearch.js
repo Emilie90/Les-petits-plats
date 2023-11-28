@@ -199,8 +199,9 @@ export function handleTagClick(uniqueArray, listContainer, key, selectedArray) {
 
         return selectedTags.every((tag) => recipeContent.includes(tag));
       });
-      fillListBox(uniqueArray, listContainer);
+      // fillListBox(uniqueArray, listContainer);
       displaySearchResults(searchResults);
+
       displayTagsSelected(selectedTags, key, selectedArray, uniqueArray);
       displayTagListbox(
         listContainer,

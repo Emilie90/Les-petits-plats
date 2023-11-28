@@ -2,7 +2,11 @@ import { displaySearchResults } from "./Cards.js";
 import { recipes } from "../../data/recipes.js";
 import { capitalizeFirstLetter } from "../tagSearch.js";
 import { normalizeName } from "../tagSearch.js";
+import { fillListBox } from "../tagSearch.js";
 
+const ingredientsList = document.getElementById("ingredientsList");
+const appliancesList = document.getElementById("appliancesList");
+const ustensilsList = document.getElementById("ustensilsList");
 const tagContainer = document.getElementById("tagContainer");
 let tagElements = [];
 export const displayTagsSelected = (
@@ -87,7 +91,6 @@ export const deleteTags = (
   if (tagIndex !== -1) {
     selectedArray.splice(tagIndex, 1);
   }
-  uniqueArray.push(tagToRemove);
   const index = tagselected.indexOf(tagToRemove);
   tagselected.splice(index, 1);
 
@@ -120,5 +123,6 @@ export const updateResultsAfterTagRemoval = (tagselected, idTag) => {
     return tagselected.every((tag) => recipeContent.includes(tag));
   });
   // console.log(tagElements, tagselected);
+
   displaySearchResults(searchResults);
 };

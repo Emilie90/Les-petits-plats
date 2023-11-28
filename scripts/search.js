@@ -53,4 +53,9 @@ clearSearch.addEventListener("click", () => {
   recipeSearch.value = "";
   displaySearchResults(recipes);
   clearSearch.style.display = "none";
+  const { uniqueIngredients, uniqueAppliances, uniqueUstensils } =
+    extractUniqueTags(recipes);
+  fillListBox(uniqueIngredients, ingredientsList);
+  fillListBox(uniqueAppliances, appliancesList);
+  fillListBox(uniqueUstensils, ustensilsList);
 });
