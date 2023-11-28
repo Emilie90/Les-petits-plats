@@ -179,6 +179,8 @@ let selectedUstensils = [];
 
 export function handleTagClick(uniqueArray, listContainer, key, selectedArray) {
   listContainer.addEventListener("click", (e) => {
+    let tagElements = [];
+
     const selectedTag = e.target.textContent.toLowerCase();
 
     if (!selectedArray.includes(selectedTag)) {
@@ -208,13 +210,20 @@ export function handleTagClick(uniqueArray, listContainer, key, selectedArray) {
 
       fillListBox(uniqueArray, listContainer);
       displaySearchResults(searchResults);
-      displayTagsSelected(selectedTags, key, selectedArray);
+      displayTagsSelected(
+        selectedTags,
+        key,
+        selectedArray,
+        listContainer,
+        tagElements
+      );
       displayTagListbox(
         listContainer,
         key,
         selectedArray,
         selectedTags,
-        uniqueArray
+        uniqueArray,
+        tagElements
       );
     }
   });

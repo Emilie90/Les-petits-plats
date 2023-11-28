@@ -4,11 +4,21 @@ import { capitalizeFirstLetter } from "../tagSearch.js";
 import { normalizeName } from "../tagSearch.js";
 
 const tagContainer = document.getElementById("tagContainer");
-let tagElements = [];
-export const displayTagsSelected = (tagselected, key, selectedArray) => {
+
+export const displayTagsSelected = (
+  tagselected,
+  key,
+  selectedArray,
+  listContainer,
+  tagElements
+) => {
+  console.log("tagElemennt:", tagElements);
+
   tagContainer.innerHTML = "";
   console.log("tagselected :", tagselected);
   tagselected.forEach((tags) => {
+    console.log("Création Tag :", tags);
+
     const tagCapitalize = capitalizeFirstLetter(tags);
     const idTag = `${tags.toLowerCase()}`;
 
@@ -18,13 +28,13 @@ export const displayTagsSelected = (tagselected, key, selectedArray) => {
     tag.innerHTML = `<div class="bg-jaune items-center justify-between flex w-40 h-14 px-4 py-4 text-sm font-normal rounded-lg tag" data-type="${key}" data-value="${tags.toLowerCase()}">${tagCapitalize} <svg xmlns="http://www.w3.org/2000/svg" class="tagClearsCross cursor-pointer" width="14" height="13" viewBox="0 0 14 13" fill="none">
         <path d="M12 11.5L7 6.5M7 6.5L2 1.5M7 6.5L12 1.5M7 6.5L2 11.5" stroke="#1B1B1B" stroke-width="2.16667" stroke-linecap="round" stroke-linejoin="round"/>
       </svg></div>`;
-
-    tagElements.push({ element: tag, idTag });
+    tagElements.push({ idTag, element: tag });
     tagContainer.appendChild(tag);
+    console.log("tagElements :", tagElements);
 
     const tagClearsCross = tag.querySelector(".tagClearsCross");
     tagClearsCross.addEventListener("click", () => {
-      deleteTags(idTag, tagselected, selectedArray, tags);
+      deleteTags(idTag, tagselected, selectedArray, tags, tagElements);
       updateResultsAfterTagRemoval(tagselected, idTag, tagElements);
     });
   });
@@ -36,7 +46,8 @@ export const displayTagListbox = (
   selectedArray,
   tagselected,
 
-  uniqueArray
+  uniqueArray,
+  tagElements
 ) => {
   selectedArray.forEach((tags) => {
     const tagDiv = document.createElement("div");
@@ -46,7 +57,7 @@ export const displayTagListbox = (
       normalizeName(tags)
     )} <img class="tagListclearsCross" src="../../images/cross.svg" alt="deletetag"/>
           </div>`;
-    tagElements.push({ element: tagDiv, idTag });
+    tagElements.push({ idTag, element: tagDiv });
     listContainer.insertBefore(tagDiv, listContainer.firstChild);
 
     tagDiv.addEventListener("click", (e) => {
@@ -56,14 +67,22 @@ export const displayTagListbox = (
       // selectedArray.splice(indexArray, 1);
       // const index = tagselected.indexOf(tags);
       // tagselected.splice(index, 1);
-      deleteTags(idTag, tagselected, selectedArray, tags);
+      deleteTags(idTag, tagselected, selectedArray, tags, tagElements);
       uniqueArray.push(capitalizeFirstLetter(normalizeName(tags)));
       updateResultsAfterTagRemoval(tagselected, idTag, tagElements);
     });
   });
 };
 
-export const deleteTags = (idTag, tagselected, selectedArray, tagToRemove) => {
+export const deleteTags = (
+  idTag,
+  tagselected,
+  selectedArray,
+  tagToRemove,
+  tagElements
+) => {
+  console.log("tagElements :", tagElements);
+
   const tagIndex = selectedArray.indexOf(tagToRemove);
   console.log(" tagToRemove :", tagToRemove);
 
@@ -82,9 +101,10 @@ export const deleteTags = (idTag, tagselected, selectedArray, tagToRemove) => {
     }
     return true;
   });
+
   console.log("tagElements :", tagElements);
   console.log("tagselected :", tagselected);
-  updateResultsAfterTagRemoval(tagselected, idTag, tagElements);
+  updateResultsAfterTagRemoval(tagselected);
 };
 
 // Fonction pour mettre à jour les résultats après la suppression d'un tag
