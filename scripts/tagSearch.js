@@ -159,9 +159,13 @@ handleTagSearch(
 );
 
 // Fonction générique pour mettre à jour la liste d'options
-export function updateListBox(results, listBox, key) {
-  //
-  fillListBox(uniqueValues, listBox);
+export function updateListBox(results) {
+  const { uniqueIngredients, uniqueAppliances, uniqueUstensils } =
+    extractUniqueTags(results);
+
+  fillListBox(uniqueIngredients, ingredientsList);
+  fillListBox(uniqueAppliances, appliancesList);
+  fillListBox(uniqueUstensils, ustensilsList);
 }
 // Variable globale pour stocker les tags sélectionnés
 
@@ -199,8 +203,8 @@ export function handleTagClick(uniqueArray, listContainer, key, selectedArray) {
 
         return selectedTags.every((tag) => recipeContent.includes(tag));
       });
-      // fillListBox(uniqueArray, listContainer);
       displaySearchResults(searchResults);
+      updateListBox(searchResults);
 
       displayTagsSelected(selectedTags, key, selectedArray, uniqueArray);
       displayTagListbox(

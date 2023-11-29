@@ -2,11 +2,8 @@ import { displaySearchResults } from "./Cards.js";
 import { recipes } from "../../data/recipes.js";
 import { capitalizeFirstLetter } from "../tagSearch.js";
 import { normalizeName } from "../tagSearch.js";
-import { fillListBox } from "../tagSearch.js";
+import { updateListBox } from "../tagSearch.js";
 
-const ingredientsList = document.getElementById("ingredientsList");
-const appliancesList = document.getElementById("appliancesList");
-const ustensilsList = document.getElementById("ustensilsList");
 const tagContainer = document.getElementById("tagContainer");
 let tagElements = [];
 export const displayTagsSelected = (
@@ -125,4 +122,5 @@ export const updateResultsAfterTagRemoval = (tagselected, idTag) => {
   // console.log(tagElements, tagselected);
 
   displaySearchResults(searchResults);
+  updateListBox(searchResults);
 };
