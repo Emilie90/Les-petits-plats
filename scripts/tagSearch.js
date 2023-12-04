@@ -38,10 +38,23 @@ export function capitalizeFirstLetter(str) {
 
 // Fonction générique pour gérer l'ajout d'événement au clic
 function toggleList(element, list, searchBg) {
-  element.addEventListener("click", () => {
+  element.addEventListener("click", (event) => {
+    // Empêcher la propagation de l'événement pour éviter la fermeture immédiate
+    event.stopPropagation();
+
     // Afficher ou masquer la liste
     list.classList.toggle("hidden");
     searchBg.classList.toggle("hidden");
+  });
+
+  // Ajouter un gestionnaire d'événements sur le document pour fermer la liste lors d'un clic à l'extérieur
+  document.addEventListener("click", (event) => {
+    // Vérifier si le clic a eu lieu à l'intérieur de la liste ou sur l'élément qui a déclenché l'ouverture de la liste
+    if (!list.contains(event.target) && event.target !== element) {
+      // Masquer la liste
+      list.classList.add("hidden");
+      searchBg.classList.add("hidden");
+    }
   });
 }
 
@@ -169,70 +182,51 @@ export function updateListBox(results) {
 }
 // Variable globale pour stocker les tags sélectionnés
 
-let selectedIngredients = [];
-let selectedAppliance = [];
-let selectedUstensils = [];
+// let selectedIngredients = [];
+// let selectedAppliance = [];
+// let selectedUstensils = [];
 
 // gestionnaire d'événements au clic sur les options de la liste
+let selectedTags = [];
 
-export function handleTagClick(uniqueArray, listContainer, key, selectedArray) {
+export function handleTagClick(listContainer, key, selectedArray) {
   listContainer.addEventListener("click", (e) => {
     const selectedTag = e.target.textContent.toLowerCase();
+    const tag = e.target;
+    e.target.classList.add("selected");
+    // if (!selectedArray.includes(selectedTag)) {
+    //   selectedArray.push(selectedTag);
 
-    if (!selectedArray.includes(selectedTag)) {
-      selectedArray.push(selectedTag);
+    const tagUniqueArray = capitalizeFirstLetter(normalizeName(selectedTag));
+    // const index = uniqueArray.indexOf(tagUniqueArray);
+    // uniqueArray.splice(index, 1);
 
-      const tagUniqueArray = capitalizeFirstLetter(normalizeName(selectedTag));
-      const index = uniqueArray.indexOf(tagUniqueArray);
-      uniqueArray.splice(index, 1);
+    // let selectedTags = selectedIngredients.concat(
+    //   selectedAppliance,
+    //   selectedUstensils
+    // );
+    selectedTags.push(selectedTag);
+    console.log(selectedTags);
+    const searchResults = recipes.filter((recipe) => {
+      const recipeContent =
+        recipe.name.toLowerCase() +
+        recipe.description.toLowerCase() +
+        recipe.ingredients
+          .map((ingredient) => ingredient.ingredient.toLowerCase())
+          .join("") +
+        recipe.appliance.toLowerCase() +
+        recipe.ustensils.map((ustensil) => ustensil.toLowerCase()).join("");
 
-      let selectedTags = selectedIngredients.concat(
-        selectedAppliance,
-        selectedUstensils
-      );
+      return selectedTags.every((tag) => recipeContent.includes(tag));
+    });
+    displaySearchResults(searchResults);
+    updateListBox(searchResults);
 
-      const searchResults = recipes.filter((recipe) => {
-        const recipeContent =
-          recipe.name.toLowerCase() +
-          recipe.description.toLowerCase() +
-          recipe.ingredients
-            .map((ingredient) => ingredient.ingredient.toLowerCase())
-            .join("") +
-          recipe.appliance.toLowerCase() +
-          recipe.ustensils.map((ustensil) => ustensil.toLowerCase()).join("");
-
-        return selectedTags.every((tag) => recipeContent.includes(tag));
-      });
-      displaySearchResults(searchResults);
-      updateListBox(searchResults);
-
-      displayTagsSelected(selectedTags, key, selectedArray, uniqueArray);
-      displayTagListbox(
-        listContainer,
-        key,
-        selectedArray,
-        selectedTags,
-        uniqueArray
-      );
-    }
+    displayTagsSelected(selectedTags, key);
+    // displayTagListbox(listContainer, key, selectedTags, tag);
   });
 }
 
-handleTagClick(
-  uniqueIngredientsArray,
-  ingredientsList,
-  "ingredients",
-  selectedIngredients
-);
-handleTagClick(
-  uniqueAppliancesArray,
-  appliancesList,
-  "appliance",
-  selectedAppliance
-);
-handleTagClick(
-  uniqueUstensilsArray,
-  ustensilsList,
-  "ustensils",
-  selectedUstensils
-);
+handleTagClick(ingredientsList, "ingredients");
+handleTagClick(appliancesList, "appliance");
+handleTagClick(ustensilsList, "ustensils");
