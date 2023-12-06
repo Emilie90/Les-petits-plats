@@ -258,48 +258,28 @@ export function updateListBox(results) {
     selectedTags
   );
 }
-
-export function getDisplayedRecipes() {
-  const displayedRecipes = Array.from(
-    recipesContainer.querySelectorAll(".bg-white")
-  ).map((recipeCard) => {
-    const name = recipeCard.querySelector(".name").textContent;
-    const ingredientsList = Array.from(
-      recipeCard.querySelectorAll(".ingredients li p:first-child")
-    ).map((ingredient) => ingredient.textContent);
-    console.log(ingredientsList);
-
-    return {
-      name,
-      ingredients: ingredientsList,
-    };
-  });
-
-  return displayedRecipes;
-}
-
 // Variable globale pour stocker les tags sélectionnés
-let selectedTags = [];
 
 // gestionnaire d'événements au clic sur les options de la liste
+let selectedTags = [];
+
 export function handleTagClick(listContainer, key) {
   listContainer.addEventListener("click", (e) => {
-    const displayedRecipes = getDisplayedRecipes();
-    // console.log(displayedRecipes);
     const selectedTag = e.target.textContent.toLowerCase();
     e.target.classList.add("selected");
+
     selectedTags.push(selectedTag);
     const searchResults = recipes.filter((recipe) => {
-      const recipeTags = [
-        recipe.name.toLowerCase(),
-        ...recipe.ingredients.map((ingredient) =>
-          ingredient.ingredient.toLowerCase()
-        ),
-      ];
+      const recipeContent =
+        recipe.name.toLowerCase() +
+        recipe.ingredients
+          .map((ingredient) => ingredient.ingredient.toLowerCase())
+          .join("") +
+        recipe.appliance.toLowerCase() +
+        recipe.ustensils.map((ustensil) => ustensil.toLowerCase()).join("");
 
-      return selectedTags.every((tag) => recipeTags.includes(tag));
+      return selectedTags.every((tag) => recipeContent.includes(tag));
     });
-
     console.log(searchResults);
     displaySearchResults(searchResults);
     updateListBox(searchResults);
