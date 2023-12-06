@@ -42,11 +42,11 @@ export const displaySearchResults = (results, searchQuery) => {
         recipe.description
       }</p>
       <h4 class="text-gris-dark text-xs py-5 font-bold font-manrope uppercase tracking-wide">Ingrédients</h4>
-      <ul class=" grid grid-cols-2 gap-4">
+      <ul class="ingredients grid grid-cols-2 gap-4">
         ${recipe.ingredients
           .map(
             (ingredient) => `
-          <li class="text-sm"><p class="ingredients">${
+          <li class="text-sm"><p>${
             ingredient.ingredient
           }</p><p class="text-gris-dark">${ingredient.quantity || "-"} ${
               ingredient.unit || ""

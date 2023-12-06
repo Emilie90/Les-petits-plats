@@ -1,6 +1,7 @@
 // Methode boucle
 import { recipes } from "../data/recipes.js";
 import { displaySearchResults } from "./Templates/Cards.js";
+import { deleteAllTags } from "./Templates/TagsSelected.js";
 import { updateListBox } from "./tagSearch.js";
 // Récupérer la référence du champ de recherche
 const recipeSearch = document.getElementById("search");
@@ -45,4 +46,12 @@ clearSearch.addEventListener("click", () => {
   clearSearch.style.display = "none";
 
   updateListBox(recipes);
+});
+
+document.addEventListener("click", (event) => {
+  // Vérifier si le clic a eu lieu à l'intérieur de la liste ou sur l'élément qui a déclenché l'ouverture de la liste
+  if (!recipeSearch.contains(event.target) && event.target !== recipeSearch) {
+    // Masquer la liste
+    recipeSearch.value = "";
+  }
 });
