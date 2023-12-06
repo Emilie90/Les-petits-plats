@@ -1,5 +1,6 @@
 import { recipes } from "../data/recipes.js";
 import { displaySearchResults } from "./Templates/Cards.js";
+import { currentSearchResults } from "./search.js";
 import {
   deleteTags,
   displayTagsSelected,
@@ -146,12 +147,15 @@ function handleTagSearch(inputElement, listBox, clearSearchButton) {
       "hidden",
       inputElement.value.length === 0
     );
+    if (inputElement.value.length === 0) {
+      clearSearchButton.click();
+    }
   });
 
   // Gestionnaire d'événements pour la sélection d'un élément de la liste
   listBox.addEventListener("click", (e) => {
-    console.log(currentSelection);
     const selectedTag = e.target.textContent.toLowerCase();
+    console.log("currentSelection", currentSelection);
     // Ajouter ou retirer le tag de la sélection actuelle
     if (currentSelection.includes(selectedTag)) {
       currentSelection = currentSelection.filter((tag) => tag !== selectedTag);
@@ -160,13 +164,12 @@ function handleTagSearch(inputElement, listBox, clearSearchButton) {
     }
   }); // Ajout d'un gestionnaire d'événements pour effacer le champ de recherche
   clearSearchButton.addEventListener("click", (e) => {
-    console.log(currentSelection);
     e.stopPropagation();
     inputElement.value = "";
     // Masquage du bouton Clear après l'effacement
     clearSearchButton.classList.add("hidden");
     // Réinitialisation de la liste avec la sélection actuelle
-    updateResultsAfterTagRemoval(currentSelection);
+    // updateResultsAfterTagRemoval(currentSelection);
   });
 }
 
@@ -259,9 +262,9 @@ export function updateListBox(results) {
   );
 }
 // Variable globale pour stocker les tags sélectionnés
+let selectedTags = [];
 
 // gestionnaire d'événements au clic sur les options de la liste
-let selectedTags = [];
 
 export function handleTagClick(listContainer, key) {
   listContainer.addEventListener("click", (e) => {
@@ -269,21 +272,36 @@ export function handleTagClick(listContainer, key) {
     e.target.classList.add("selected");
 
     selectedTags.push(selectedTag);
-    const searchResults = recipes.filter((recipe) => {
-      const recipeContent =
-        recipe.name.toLowerCase() +
-        recipe.ingredients
-          .map((ingredient) => ingredient.ingredient.toLowerCase())
-          .join("") +
-        recipe.appliance.toLowerCase() +
-        recipe.ustensils.map((ustensil) => ustensil.toLowerCase()).join("");
+    const searchResults = filterRecipesByTags(selectedTags);
+    // const searchResults = recipes.filter((recipe) => {
+    //   const recipeContent =
+    //     recipe.name.toLowerCase() +
+    //     recipe.ingredients
+    //       .map((ingredient) => ingredient.ingredient.toLowerCase())
+    //       .join("") +
+    //     recipe.appliance.toLowerCase() +
+    //     recipe.ustensils.map((ustensil) => ustensil.toLowerCase()).join("");
 
-      return selectedTags.every((tag) => recipeContent.includes(tag));
-    });
+    //   return selectedTags.every((tag) => recipeContent.includes(tag));
+    // });
     console.log(searchResults);
     displaySearchResults(searchResults);
     updateListBox(searchResults);
     displayTagsSelected(selectedTags, key);
+  });
+}
+
+function filterRecipesByTags(tags) {
+  return currentSearchResults.filter((recipe) => {
+    const recipeContent =
+      recipe.name.toLowerCase() +
+      recipe.ingredients
+        .map((ingredient) => ingredient.ingredient.toLowerCase())
+        .join("") +
+      recipe.appliance.toLowerCase() +
+      recipe.ustensils.map((ustensil) => ustensil.toLowerCase()).join("");
+
+    return tags.every((tag) => recipeContent.includes(tag));
   });
 }
 
