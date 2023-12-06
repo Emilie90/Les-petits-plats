@@ -34,19 +34,19 @@ export const displaySearchResults = (results, searchQuery) => {
     <img class="w-96 h-64 object-cover rounded-t-3xl" src="../images/recettes-images/${
       recipe.image
     }" alt="${recipe.name}"><div class="p-4">
-      <h3 class="font-normal py-1 text-zinc font-anton text-lg">${
+      <h3 class="name font-normal py-1 text-zinc font-anton text-lg">${
         recipe.name
       }</h3>
       <h4 class="text-gris-dark text-xs py-4 font-bold font-manrope uppercase tracking-wide">Recette</h4>
-      <p class="w-[350px] overflow-auto h-32 text-zinc text-justify text-sm font-normal font-manrope">${
+      <p class="description w-[350px] overflow-auto h-32 text-zinc text-justify text-sm font-normal font-manrope">${
         recipe.description
       }</p>
       <h4 class="text-gris-dark text-xs py-5 font-bold font-manrope uppercase tracking-wide">Ingrédients</h4>
-      <ul class="grid grid-cols-2 gap-4">
+      <ul class=" grid grid-cols-2 gap-4">
         ${recipe.ingredients
           .map(
             (ingredient) => `
-          <li class="text-sm"><p >${
+          <li class="text-sm"><p class="ingredients">${
             ingredient.ingredient
           }</p><p class="text-gris-dark">${ingredient.quantity || "-"} ${
               ingredient.unit || ""
