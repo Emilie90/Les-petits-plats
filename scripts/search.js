@@ -1,6 +1,6 @@
 import { recipes } from "../data/recipes.js";
 import { displaySearchResults } from "./Templates/Cards.js";
-import { updateListBox } from "./tagSearch.js";
+import { updateListBox, selectedTags } from "./tagSearch.js";
 
 const recipeSearch = document.getElementById("search");
 const clearSearch = document.getElementById("clearSearch");
@@ -28,6 +28,7 @@ recipeSearch.addEventListener("input", () => {
     searchResults = recipes;
   }
 
+  // Réaffectez la variable globale plutôt que de la redéclarer localement
   currentSearchResults = searchResults;
 
   updateListBox(currentSearchResults);
@@ -48,5 +49,8 @@ document.addEventListener("click", (event) => {
   if (!recipeSearch.contains(event.target) && event.target !== recipeSearch) {
     recipeSearch.value = "";
     clearSearch.style.display = "none";
+    if (selectedTags.length === 0) {
+      currentSearchResults = recipes;
+    }
   }
 });

@@ -1,6 +1,6 @@
 import { displaySearchResults } from "./Cards.js";
 import { recipes } from "../../data/recipes.js";
-import { capitalizeFirstLetter } from "../tagSearch.js";
+import { capitalizeFirstLetter, currentSelection } from "../tagSearch.js";
 import { updateListBox } from "../tagSearch.js";
 
 const tagContainer = document.getElementById("tagContainer");
@@ -9,7 +9,6 @@ export const displayTagsSelected = (tagselected, key) => {
   tagContainer.innerHTML = "";
 
   tagselected.forEach((tags) => {
-    console.log("Création Tag :", tags);
     const listItem = document.createElement("li");
     const tagCapitalize = capitalizeFirstLetter(tags);
     const idTag = `${tags.toLowerCase()}`;
@@ -31,21 +30,18 @@ export const displayTagsSelected = (tagselected, key) => {
 
 export const deleteTags = (tagselected, tagToRemove, element) => {
   const index = tagselected.indexOf(tagToRemove);
-  console.log(index);
   tagselected.splice(index, 1);
+  const indexCurrentSelection = currentSelection.indexOf(tagToRemove);
+  currentSelection.splice(indexCurrentSelection, 1);
   element.parentNode.removeChild(element);
+
   updateResultsAfterTagRemoval(tagselected);
   displayTagsSelected(tagselected);
 };
 
-export const deleteAllTags = (tagselected) => {
-  tagselected = [];
-  tagContainer.innerHTML = "";
-};
-
 // Fonction pour mettre à jour les résultats après la suppression d'un tag
 export const updateResultsAfterTagRemoval = (tagselected) => {
-  const searchResults = recipes.filter((recipe) => {
+  let searchResults = recipes.filter((recipe) => {
     // Concaténation du contenu de la recette à rechercher
     const recipeContent =
       recipe.name.toLowerCase() +
@@ -57,7 +53,7 @@ export const updateResultsAfterTagRemoval = (tagselected) => {
 
     return tagselected.every((tag) => recipeContent.includes(tag));
   });
-
+  // currentSearchResults = searchResults;
   displaySearchResults(searchResults);
 
   updateListBox(searchResults);

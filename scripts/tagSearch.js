@@ -125,8 +125,28 @@ function getDisplayedTags(listBox) {
   );
   return displayedTags;
 }
-let currentSelection = [];
+export let currentSelection = [];
+
 function handleTagSearch(inputElement, listBox, clearSearchButton) {
+  // Gestionnaire d'événements pour la sélection d'un élément de la liste
+  listBox.addEventListener("click", (e) => {
+    const selectedTag = e.target.textContent.toLowerCase();
+
+    // Ajouter ou retirer le tag de la sélection actuelle
+    if (currentSelection.includes(selectedTag)) {
+      currentSelection = currentSelection.filter((tag) => tag !== selectedTag);
+    } else {
+      currentSelection.push(selectedTag);
+    }
+
+    // Filtrer les résultats de la recherche en fonction des tags sélectionnés
+    let filteredResults = filterRecipesByTags(currentSelection);
+
+    // Mise à jour des résultats après la sélection du tag
+    updateResultsAfterTagRemoval(filteredResults);
+    updateListBox(filteredResults);
+  });
+
   inputElement.addEventListener("click", (e) => {
     e.stopPropagation();
   });
@@ -152,24 +172,21 @@ function handleTagSearch(inputElement, listBox, clearSearchButton) {
     }
   });
 
-  // Gestionnaire d'événements pour la sélection d'un élément de la liste
-  listBox.addEventListener("click", (e) => {
-    const selectedTag = e.target.textContent.toLowerCase();
-    console.log("currentSelection", currentSelection);
-    // Ajouter ou retirer le tag de la sélection actuelle
-    if (currentSelection.includes(selectedTag)) {
-      currentSelection = currentSelection.filter((tag) => tag !== selectedTag);
-    } else {
-      currentSelection.push(selectedTag);
-    }
-  }); // Ajout d'un gestionnaire d'événements pour effacer le champ de recherche
+  // Ajout d'un gestionnaire d'événements pour effacer le champ de recherche
   clearSearchButton.addEventListener("click", (e) => {
+    // Filtrer les résultats de la recherche en fonction des tags sélectionnés
+    let filteredResults =
+      currentSelection.length === 0
+        ? recipes // Utilisez la liste complète si currentSelection est vide
+        : filterRecipesByTags(currentSelection);
+
     e.stopPropagation();
     inputElement.value = "";
     // Masquage du bouton Clear après l'effacement
     clearSearchButton.classList.add("hidden");
-    // Réinitialisation de la liste avec la sélection actuelle
-    // updateResultsAfterTagRemoval(currentSelection);
+
+    // Mise à jour des résultats après l'effacement du champ de recherche
+    updateListBox(filteredResults);
   });
 }
 
@@ -262,7 +279,7 @@ export function updateListBox(results) {
   );
 }
 // Variable globale pour stocker les tags sélectionnés
-let selectedTags = [];
+export let selectedTags = [];
 
 // gestionnaire d'événements au clic sur les options de la liste
 
@@ -284,8 +301,8 @@ export function handleTagClick(listContainer, key) {
 
     //   return selectedTags.every((tag) => recipeContent.includes(tag));
     // });
-    console.log(searchResults);
     displaySearchResults(searchResults);
+
     updateListBox(searchResults);
     displayTagsSelected(selectedTags, key);
   });
