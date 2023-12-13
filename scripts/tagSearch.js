@@ -1,6 +1,6 @@
 import { recipes } from "../data/recipes.js";
 import { displaySearchResults } from "./Templates/Cards.js";
-import { currentSearchResults } from "./search.js";
+import { currentSearchResults } from "./search3.js";
 import {
   deleteTags,
   displayTagsSelected,
