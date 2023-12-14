@@ -17,7 +17,7 @@
       <!-- logo -->
       <div class="flex p-10">
         <img
-          src="public/Les petits plats.svg"
+          src="public/Lespetitsplats.svg"
           alt="logo"
           class="w-[207px] h-[25.26px] justify-center items-end gap-[4.60px] inline-flex"
         /><img src="/public/Group3.svg" alt="logo" class="self-center" />
@@ -43,7 +43,7 @@
                 class="relative flex-auto block h-16 px-3 m-0 mr-16 placeholder-gris-dark text-gris-dark font-manrope rounded-xl focus:outline-none focus:placeholder-gris-dark focus:text-gris-dark"
                 placeholder="Rechercher une recette, un ingrédient, ..."
                 aria-label="Search"
-                aria-describedby="button-addon1"
+                aria-describedby="search"
                 data-search
               />
               <button
@@ -70,7 +70,7 @@
               <button
                 class="w-12 h-12 bg-zinc rounded-[10px] -ml-16 z-10 self-center hover:bg-jaune"
                 type="button"
-                id="button-addon1"
+                id="button-addon2"
                 data-te-ripple-init
                 data-te-ripple-color="light"
               >
@@ -95,16 +95,14 @@
       <section class="px-10 h-14 font-manrope">
         <div class="absolute z-20 flex justify-between gap-[600px]">
           <!-- tag -->
-          <span class="flex gap-10">
+          <div class="flex gap-10">
             <!-- tag ingrédient -->
             <div class="flex flex-col rounded-xl">
-              <button
+              <div
                 id="ingredientsButton"
-                class="inline-flex items-center justify-start w-48 px-4 py-4 bg-white h-14 rounded-xl gap-14"
+                class="inline-flex items-center justify-start w-48 px-4 py-4 bg-white cursor-pointer h-14 rounded-xl gap-14"
               >
-                <h2 class="z-10 text-base font-medium text-zinc">
-                  Ingrédients
-                </h2>
+                <p class="z-10 text-base font-medium text-zinc">Ingrédients</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="w-4 h-4 ml-1"
@@ -116,7 +114,7 @@
                 >
                   <path d="M19 9l-7 7-7-7"></path>
                 </svg>
-              </button>
+              </div>
               <div
                 id="ingredientSearchbg"
                 class="relative hidden -mt-5 bg-white"
@@ -169,17 +167,16 @@
                 <ul
                   id="ingredientsList"
                   class="hidden w-48 h-64 overflow-auto text-xs bg-white ingredientsList rounded-b-xl font-extralight"
-                  multiple
                 ></ul>
               </div>
             </div>
 
             <div class="flex flex-col rounded-xl">
-              <button
+              <div
                 id="appliancesButton"
-                class="inline-flex items-center justify-start w-48 gap-16 px-4 py-4 bg-white h-14 rounded-xl"
+                class="inline-flex items-center justify-start w-48 gap-16 px-4 py-4 bg-white cursor-pointer h-14 rounded-xl"
               >
-                <h2 class="z-10 text-base font-medium text-zinc">Appareils</h2>
+                <p class="z-10 text-base font-medium text-zinc">Appareils</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="w-4 h-4 ml-1"
@@ -191,7 +188,7 @@
                 >
                   <path d="M19 9l-7 7-7-7"></path>
                 </svg>
-              </button>
+              </div>
               <div
                 id="appliancesSearchBg"
                 class="relative hidden -mt-5 bg-white"
@@ -203,81 +200,6 @@
                   class="w-40 pl-1 m-3 text-xs border rounded-sm h-9 text-gris border-gris focus:outline-none"
                 /><button
                   id="clearSearchTagAppliances"
-                  class="absolute hidden cursor-pointer right-12 top-7"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="8"
-                    height="8"
-                    viewBox="0 0 17 17"
-                    fill="none"
-                  >
-                    <path
-                      d="M15 15L8.5 8.5M8.5 8.5L2 2M8.5 8.5L15 2M8.5 8.5L2 15"
-                      stroke="#7A7A7A"
-                      stroke-width="2.16667"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg></button
-                ><button
-                  class="absolute w-4 h-4 cursor-pointer right-7 top-4"
-                  type="button"
-                  id="button-addon2"
-                  data-te-ripple-init
-                  data-te-ripple-color="light"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    class="inline w-4 h-4 text-center fill-gris"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </button>
-              </div>
-              <div id="appliancesContainer" class="tagListBoxContainer">
-                <ul
-                  id="appliancesList"
-                  class="hidden w-48 h-64 overflow-auto text-xs bg-white rounded-b-xl font-extralight appliancesList"
-                  multiple
-                ></ul>
-              </div>
-            </div>
-
-            <div class="flex flex-col rounded-xl">
-              <button
-                id="ustensilsButton"
-                class="inline-flex items-center justify-start w-48 gap-16 px-4 py-4 bg-white h-14 rounded-xl"
-              >
-                <h2 class="z-10 text-base font-medium text-zinc">Ustensiles</h2>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-4 h-4 ml-1"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M19 9l-7 7-7-7"></path>
-                </svg>
-              </button>
-              <div
-                id="ustensilsSearchBg"
-                class="relative hidden -mt-5 bg-white"
-              >
-                <input
-                  type="text"
-                  id="ustensilsSearch"
-                  placeholder=""
-                  class="w-40 pl-1 m-3 text-xs border rounded-sm h-9 text-gris border-gris focus:outline-none"
-                /><button
-                  id="clearSearchTagUstensils"
                   class="absolute hidden cursor-pointer right-12 top-7"
                 >
                   <svg
@@ -315,15 +237,88 @@
                   </svg>
                 </button>
               </div>
+              <div id="appliancesContainer" class="tagListBoxContainer">
+                <ul
+                  id="appliancesList"
+                  class="hidden w-48 h-64 overflow-auto text-xs bg-white rounded-b-xl font-extralight appliancesList"
+                ></ul>
+              </div>
+            </div>
+
+            <div class="flex flex-col rounded-xl">
+              <div
+                id="ustensilsButton"
+                class="inline-flex items-center justify-start w-48 gap-16 px-4 py-4 bg-white h-14 rounded-xl"
+              >
+                <p class="z-10 text-base font-medium text-zinc">Ustensiles</p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-4 h-4 ml-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </div>
+              <div
+                id="ustensilsSearchBg"
+                class="relative hidden -mt-5 bg-white"
+              >
+                <input
+                  type="text"
+                  id="ustensilsSearch"
+                  placeholder=""
+                  class="w-40 pl-1 m-3 text-xs border rounded-sm h-9 text-gris border-gris focus:outline-none"
+                /><button
+                  id="clearSearchTagUstensils"
+                  class="absolute hidden cursor-pointer right-12 top-7"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="8"
+                    height="8"
+                    viewBox="0 0 17 17"
+                    fill="none"
+                  >
+                    <path
+                      d="M15 15L8.5 8.5M8.5 8.5L2 2M8.5 8.5L15 2M8.5 8.5L2 15"
+                      stroke="#7A7A7A"
+                      stroke-width="2.16667"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg></button
+                ><button
+                  class="absolute w-4 h-4 cursor-pointer right-7 top-4"
+                  type="button"
+                  id="button-addon4"
+                  data-te-ripple-init
+                  data-te-ripple-color="light"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    class="inline w-4 h-4 text-center fill-gris"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </div>
               <div id="ustensilsContainer" class="tagListBoxContainer">
                 <ul
                   id="ustensilsList"
                   class="hidden w-48 h-64 overflow-auto text-xs bg-white rounded-b-xl font-extralight ustensilsList"
-                  multiple
                 ></ul>
               </div>
             </div>
-          </span>
+          </div>
           <!-- affichage du nombre de recettes -->
           <h3
             id="nbRecipes"
@@ -333,16 +328,16 @@
           </h3>
         </div>
       </section>
-      <section>
+      <div>
         <div id="tagContainer" class="flex flex-wrap px-10 pt-5 gap-14"></div>
-      </section>
-      <section>
+      </div>
+      <div>
         <!-- zone d'affichage recettes -->
         <div
           id="recipesContainer"
           class="flex flex-wrap gap-10 justify-evenly pt-11"
         ></div>
-      </section>
+      </div>
     </main>
     <script type="module" src="scripts/index.js"></script>
     <script type="module" src="scripts/search3.js"></script>
