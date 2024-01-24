@@ -8,11 +8,11 @@ const clearSearch = document.getElementById("clearSearch");
 // Ajout d'un gestionnaire d'événements pour gérer la recherche
 export let currentSearchResults = recipes;
 
-recipeSearch.addEventListener("input", (listBox, key) => {
+recipeSearch.addEventListener("input", () => {
   const searchQuery = recipeSearch.value.trim().toLowerCase();
 
   if (searchQuery.length >= 3) {
-    // Update current search results
+    // Mise à jour de search results
     currentSearchResults = recipes.filter((recipe) => {
       const recipeContent = `${recipe.name} ${
         recipe.description
@@ -23,7 +23,6 @@ recipeSearch.addEventListener("input", (listBox, key) => {
       return recipeContent.includes(searchQuery);
     });
   } else {
-    // If search query is less than 3 characters, revert to the original recipe list
     currentSearchResults = recipes;
   }
 
