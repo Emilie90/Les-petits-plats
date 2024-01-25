@@ -6,28 +6,36 @@ import { updateListBox, selectedTags } from "./tagSearch.js";
 const recipeSearch = document.getElementById("search");
 const clearSearch = document.getElementById("clearSearch");
 // Ajout d'un gestionnaire d'événements pour gérer la recherche
-export let currentSearchResults = recipes;
+let initialSearchResults = [...recipes];
+export let currentSearchResults = initialSearchResults;
 
 recipeSearch.addEventListener("input", () => {
   const searchQuery = recipeSearch.value.trim().toLowerCase();
 
   if (searchQuery.length >= 3) {
     // Mise à jour de search results
-    currentSearchResults = recipes.filter((recipe) => {
+    currentSearchResults = initialSearchResults.filter((recipe) => {
       const recipeContent = `${recipe.name} ${
         recipe.description
       } ${recipe.ingredients
         .map((ingredient) => ingredient.ingredient)
         .join(" ")}`.toLowerCase();
 
-      return recipeContent.includes(searchQuery);
+      const matchesSearchQuery =
+        searchQuery.length === 0 || recipeContent.includes(searchQuery);
+      const matchesTags = selectedTags.every((tag) =>
+        recipeContent.includes(tag)
+      );
+
+      return matchesSearchQuery && matchesTags;
     });
   } else {
-    currentSearchResults = recipes;
+    currentSearchResults = initialSearchResults;
   }
-
-  updateListBox(currentSearchResults);
-  displaySearchResults(currentSearchResults, searchQuery);
+  if (searchQuery.length >= 3) {
+    updateListBox(currentSearchResults);
+    displaySearchResults(currentSearchResults, searchQuery);
+  }
 
   // Affichage de l'icône de la croix si du texte est saisi, sinon masquez-la
   clearSearch.style.display = searchQuery.length > 0 ? "block" : "none";
